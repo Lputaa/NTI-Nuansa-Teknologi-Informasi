@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -23,18 +24,12 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
   React.useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  // Prevent scroll when mobile menu is open
   React.useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -52,16 +47,21 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group">
-              <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                NTI
-              </span>
+            <Link href="/" className="flex items-center space-x-3 group">
+              <Image
+                src="/ntilogo.png" // Ganti dengan path logo kamu di folder /public
+                alt="Logo NTI"
+                width={40} // sesuaikan ukuran logo
+                height={40}
+                className="transition-transform duration-300 group-hover:scale-105"
+                priority
+              />
               <span className="text-cyan-400 font-medium text-sm hidden lg:inline-block group-hover:text-cyan-300 transition-colors">
-                Nuansa Teknologi Informasi
+                
               </span>
             </Link>
 
-            {/* Desktop Navigation - Centered */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center space-x-1">
               {navLinks.map((link) => (
                 <Link
