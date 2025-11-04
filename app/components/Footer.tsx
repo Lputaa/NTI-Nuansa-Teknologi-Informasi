@@ -145,7 +145,7 @@ const Footer = () => {
               &copy; {currentYear} NTI - Nuansa Teknologi Informasi. All rights reserved.
             </p>
             <p className="text-gray-500 text-sm">
-              Dibuat dengan <span className="text-cyan-400">❤</span> oleh Tim NTI
+              by project mangkrak'
             </p>
           </div>
         </div>
