@@ -1,23 +1,43 @@
 "use client";
 
 import {
-    ArrowRight,
-    Award,
-    Briefcase,
-    CheckCircle,
-    Clock,
-    Eye,
-    Globe,
-    Heart,
-    Lightbulb,
-    Shield,
-    Target,
-    TrendingUp,
-    Users
+  ArrowRight,
+  Award,
+  Briefcase,
+  CheckCircle,
+  Clock,
+  Eye,
+  Globe,
+  Heart,
+  Lightbulb,
+  Moon,
+  Shield,
+  Sun,
+  Target,
+  TrendingUp,
+  Users
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function AboutPage() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    setIsVisible(true);
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
+  };
+
   const values = [
     {
       icon: Shield,
@@ -153,49 +173,70 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#001B33] text-gray-100">
+    <main className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? 'bg-[#0A1628] text-gray-100' : 'bg-white text-gray-900'
+    }`}>
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className={`fixed top-20 right-4 z-50 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+          darkMode
+            ? 'bg-linear-to-r from-[#0cc0df]/10 to-[#ffde59]/10 border border-[#0cc0df]/30 text-[#0cc0df] hover:from-[#0cc0df]/20 hover:to-[#ffde59]/20'
+            : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 shadow-lg'
+        }`}
+        aria-label="Toggle theme"
+      >
+        {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+      
       {/* Hero Section */}
-      <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#002244] to-[#001B33] border-b border-white/5 overflow-hidden">
-        {/* Gradient Accent */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#ffde59]/10 to-[#0cc0df]/10 blur-3xl rounded-full" />
+      <section className="relative py-20 sm:py-28 px-4 sm:px-6 border-b border-[#0cc0df]/10 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-3xl animate-pulse bg-linear-to-b from-[#0cc0df]/10 to-[#ffde59]/5" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl bg-linear-to-t from-[#0cc0df]/5 to-[#ffde59]/5" />
+        </div>
         
-        <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#0cc0df]/20 to-[#ffde59]/20 border border-[#0cc0df]/30 rounded-full">
-            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-sm font-medium">
-              Tentang Kami
-            </p>
+        <div className={`max-w-4xl mx-auto text-center space-y-6 relative z-10 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
+          <div className="inline-block px-4 py-2 bg-linear-to-r from-[#0cc0df]/10 to-[#ffde59]/10 border border-[#0cc0df]/30 rounded-full backdrop-blur-sm">
+            <p className="text-[#0cc0df] text-sm font-bold">Tentang Kami</p>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-            Partner Transformasi Digital{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">
-              Terpercaya
-            </span>
+          <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-black ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            Partner Transformasi Digital <span className="bg-linear-to-r from-[#0cc0df] to-[#ffde59] bg-clip-text text-transparent">Terpercaya</span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className={`text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             Sejak 2018, kami telah membantu ratusan perusahaan dalam perjalanan transformasi digital mereka dengan solusi IT yang inovatif, aman, dan efisien.
           </p>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-[#000F1F] border-b border-white/5">
+      <section className={`py-16 border-b ${darkMode ? 'bg-[#142B47]/30 border-[#00D9FF]/10' : 'bg-gray-50 border-gray-200'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="text-center space-y-3 p-6 rounded-xl border border-[#0cc0df]/20 bg-gradient-to-br from-[#0cc0df]/5 to-transparent"
+                className={`text-center space-y-3 p-6 rounded-xl border backdrop-blur-sm hover:shadow-lg transition-all duration-500 animate-fade-in-up ${
+                  darkMode
+                    ? 'border-[#0cc0df]/20 bg-[#0A1628]/50 hover:border-[#0cc0df]/40 hover:shadow-[#0cc0df]/20'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-gray-200'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center mx-auto">
-                  <stat.icon className="w-6 h-6 text-[#0cc0df]" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mx-auto ${
+                  darkMode
+                    ? 'bg-[#00D9FF]/10 shadow-lg shadow-[#00D9FF]/10'
+                    : 'bg-[#00D9FF]/5 shadow-lg shadow-[#00D9FF]/5'
+                }`}>
+                  <stat.icon className="w-7 h-7 text-[#0cc0df]" />
                 </div>
-                <div className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">
+                <div className="text-4xl sm:text-5xl font-black text-[#0cc0df]">
                   {stat.value}
                 </div>
-                <div className="text-gray-400 text-sm font-medium">
+                <div className={`text-sm font-semibold uppercase tracking-wider ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {stat.label}
                 </div>
               </div>
@@ -207,71 +248,69 @@ export default function AboutPage() {
       {/* Company Overview */}
       <section className="py-20 sm:py-28">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12 space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Tentang <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">NTI</span>
+          <div className="text-center mb-12 space-y-4 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              Tentang <span className="bg-linear-to-r from-[#0cc0df] to-[#ffde59] bg-clip-text text-transparent">NTI</span>
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className={darkMode ? 'text-gray-400 text-lg' : 'text-gray-600 text-lg'}>
               Nuansa Teknologi Informasi
             </p>
           </div>
 
-          <div className="space-y-6 text-gray-300 leading-relaxed text-lg">
+          <div className={`space-y-6 leading-relaxed text-lg animate-fade-in-up ${darkMode ? 'text-gray-300' : 'text-gray-600'}`} style={{ animationDelay: '200ms' }}>
             <p>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] font-semibold">Nuansa Teknologi Informasi (NTI)</span> adalah perusahaan penyedia solusi IT yang berfokus pada transformasi digital bisnis. Kami menghadirkan layanan komprehensif mulai dari penyediaan hardware & software, cloud server management, hingga konektivitas internet untuk mendukung operasional bisnis modern.
+              Didorong oleh komitmen pada inovasi teknologi yang berkelanjutan, NUANSA TEKNOLOGI INFORMASI hadir sebagai mitra transformasi bisnis Anda. Tim profesional kami yang berdedikasi telah terbukti berhasil mengembangkan portofolio solusi yang telah diakui oleh industri.
             </p>
             <p>
-              Dengan pengalaman lebih dari 6 tahun dan telah melayani 500+ klien dari berbagai industri, kami memahami bahwa setiap bisnis memiliki kebutuhan IT yang unik. Oleh karena itu, kami berkomitmen untuk memberikan solusi yang disesuaikan dengan kebutuhan spesifik setiap klien.
-            </p>
-            <p>
-              Tim profesional kami yang bersertifikat siap memberikan konsultasi, implementasi, dan dukungan teknis untuk memastikan infrastruktur IT Anda berjalan optimal. Kami percaya bahwa teknologi yang tepat dapat menjadi pengungkit utama pertumbuhan bisnis di era digital ini.
+              Kami memiliki spesialisasi dalam pengembangan perangkat lunak, kecerdasan buatan, dan keamanan siber. Sebagai bagian dari era transformasi digital, kami berfokus pada penciptaan solusi yang memberdayakan klien kami untuk bekerja lebih efektif, sekaligus memberikan dampak sosial yang positif.
             </p>
           </div>
         </div>
       </section>
 
       {/* Visi Misi */}
-      <section className="py-20 sm:py-28 bg-[#000F1F] border-y border-white/5">
+      <section className={`py-20 sm:py-28 border-y ${
+        darkMode ? 'bg-[#142B47]/30 border-[#00D9FF]/10' : 'bg-gray-50 border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Visi */}
-            <div className="p-8 rounded-2xl border border-[#0cc0df]/20 bg-gradient-to-br from-[#0cc0df]/5 to-transparent space-y-6">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center">
-                <Eye className="w-7 h-7 text-[#0cc0df]" />
+            <div className={`p-8 rounded-2xl border backdrop-blur-sm space-y-6 transition-all duration-500 animate-fade-in-up ${
+              darkMode 
+                ? 'border-[#00D9FF]/20 bg-[#0A1628]/50 hover:border-[#00D9FF]/40 hover:shadow-xl hover:shadow-[#00D9FF]/10'
+                : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200'
+            }`}>
+              <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
+                darkMode
+                  ? 'bg-[#00D9FF]/10 shadow-lg shadow-[#00D9FF]/20'
+                  : 'bg-[#00D9FF]/5 shadow-lg shadow-[#00D9FF]/5'
+              }`}>
+                <Eye className="w-8 h-8 text-[#00D9FF]" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white mb-4">Visi Kami</h3>
-                <p className="text-gray-300 leading-relaxed text-lg">
-                  Menjadi partner transformasi digital terdepan yang memberdayakan bisnis Indonesia untuk berkembang melalui solusi teknologi informasi yang inovatif, terpercaya, dan berkelanjutan.
-                </p>
+                <h3 className={`text-2xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Visi Kami</h3>
+                <p className={`leading-relaxed text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Menjadi mitra strategis dan pelopor dalam pengembangan solusi teknologi informasi yang inovatif dan berkelanjutan, guna mendukung terciptanya ekosistem bisnis yang lebih terhubung, efisien, dan cerdas.                </p>
               </div>
             </div>
-
             {/* Misi */}
-            <div className="p-8 rounded-2xl border border-[#0cc0df]/20 bg-gradient-to-br from-[#ffde59]/5 to-transparent space-y-6">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center">
-                <Target className="w-7 h-7 text-[#ffde59]" />
+            <div className={`p-8 rounded-2xl border backdrop-blur-sm space-y-6 transition-all duration-500 animate-fade-in-up ${
+              darkMode 
+                ? 'border-[#00D9FF]/20 bg-[#0A1628]/50 hover:border-[#00D9FF]/40 hover:shadow-xl hover:shadow-[#00D9FF]/10'
+                : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200'
+            }`} style={{ animationDelay: '150ms' }}>
+              <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
+                darkMode
+                  ? 'bg-[#00D9FF]/10 shadow-lg shadow-[#00D9FF]/20'
+                  : 'bg-[#00D9FF]/5 shadow-lg shadow-[#00D9FF]/5'
+              }`}>
+                <Target className="w-8 h-8 text-[#00D9FF]" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white mb-4">Misi Kami</h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#0cc0df] flex-shrink-0 mt-1" />
-                    <span>Menyediakan solusi IT berkualitas tinggi yang sesuai dengan kebutuhan bisnis klien</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#0cc0df] flex-shrink-0 mt-1" />
-                    <span>Memberikan layanan support profesional dengan respons cepat dan solusi efektif</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#0cc0df] flex-shrink-0 mt-1" />
-                    <span>Terus berinovasi mengikuti perkembangan teknologi terkini</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-[#0cc0df] flex-shrink-0 mt-1" />
-                    <span>Membangun partnership jangka panjang berdasarkan kepercayaan dan mutual benefit</span>
-                  </li>
-                </ul>
+                <h3 className={`text-2xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Misi Kami</h3>
+                <p className={`leading-relaxed text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Menciptakan inovasi berkelanjutan melalui teknologi tingkat tinggi, menjunjung tinggi keberlanjutan lingkungan, dan memberdayakan masyarakat.                
+                  </p>
               </div>
             </div>
           </div>
@@ -281,11 +320,11 @@ export default function AboutPage() {
       {/* Company Values */}
       <section className="py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Nilai-Nilai Perusahaan
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className={`text-lg max-w-2xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Prinsip yang menjadi fondasi dalam setiap keputusan dan tindakan kami
             </p>
           </div>
@@ -294,15 +333,24 @@ export default function AboutPage() {
             {values.map((value, index) => (
               <div
                 key={index}
-                className="group p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30 hover:bg-gradient-to-br hover:from-[#0cc0df]/5 hover:to-transparent transition-all duration-300"
+                className={`group p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 animate-fade-in-up ${
+                  darkMode 
+                    ? 'border-[#00D9FF]/20 bg-[#142B47]/30 hover:border-[#00D9FF]/40 hover:bg-[#142B47]/50 hover:shadow-xl hover:shadow-[#00D9FF]/10'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 hover:shadow-xl hover:shadow-gray-200'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <value.icon className="w-6 h-6 text-[#0cc0df]" />
+                <div className={`w-14 h-14 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-500 ${
+                  darkMode
+                    ? 'bg-[#00D9FF]/10 group-hover:shadow-lg group-hover:shadow-[#00D9FF]/30'
+                    : 'bg-[#00D9FF]/5 group-hover:shadow-lg group-hover:shadow-[#00D9FF]/5'
+                }`}>
+                  <value.icon className="w-7 h-7 text-[#0cc0df]" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className={`text-xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                   {value.title}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className={`leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {value.description}
                 </p>
               </div>
@@ -312,42 +360,49 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline */}
-      <section className="py-20 sm:py-28 bg-gradient-to-b from-[#001B33] to-[#000F1F] border-y border-white/5">
+      <section className={`py-20 sm:py-28 border-y ${
+        darkMode ? 'bg-[#142B47]/30 border-[#00D9FF]/10' : 'bg-gray-50 border-gray-200'
+      }`}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Perjalanan Kami
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className={darkMode ? 'text-gray-400 text-lg' : 'text-gray-600 text-lg'}>
               Milestone dan pencapaian NTI dari tahun ke tahun
             </p>
           </div>
 
           <div className="relative">
-            {/* Timeline Line with Gradient */}
-            <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-[#0cc0df] via-[#0cc0df]/50 to-transparent hidden md:block rounded-full" />
+            {/* Timeline Line with glow */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#0cc0df] via-[#ffde59]/50 to-transparent hidden md:block shadow-[0_0_10px_#0cc0df]" />
 
             <div className="space-y-8">
               {timeline.map((item, index) => (
                 <div
                   key={index}
-                  className="relative flex items-start space-x-6 group"
+                  className="relative flex items-start space-x-6 group animate-fade-in-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {/* Year Indicator */}
-                  <div className="hidden md:flex w-16 h-16 rounded-full bg-gradient-to-br from-[#0cc0df] to-[#ffde59] items-center justify-center flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-[#0cc0df]/30">
-                    <span className="text-white font-bold text-sm">{item.year}</span>
+                  {/* Year Badge */}
+                  <div className="hidden md:flex w-16 h-16 rounded-full bg-linear-to-r from-[#0cc0df] to-[#ffde59] items-center justify-center shrink-0 relative z-10 group-hover:scale-110 group-hover:shadow-2xl group-hover:shadow-[#0cc0df]/50 transition-all duration-500 font-black text-[#0A1628]">
+                    {item.year}
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30 hover:bg-gradient-to-br hover:from-[#0cc0df]/5 hover:to-transparent transition-all duration-300">
+                  <div className={`flex-1 p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 ${
+                    darkMode 
+                      ? 'border-[#0cc0df]/20 bg-[#0A1628]/50 hover:border-[#0cc0df]/40 hover:shadow-xl hover:shadow-[#0cc0df]/10'
+                      : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200'
+                  }`}>
                     <div className="flex items-center space-x-3 mb-2 md:hidden">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] font-bold text-lg">{item.year}</span>
-                      <div className="h-px flex-1 bg-gradient-to-r from-[#0cc0df]/50 to-transparent" />
+                      <span className="text-[#0cc0df] font-black text-lg">{item.year}</span>
+                      <div className={`h-px flex-1 ${darkMode ? 'bg-[#0cc0df]/30' : 'bg-gray-200'}`} />
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                       {item.title}
                     </h3>
-                    <p className="text-gray-400 leading-relaxed">
+                    <p className={`leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       {item.description}
                     </p>
                   </div>
@@ -361,11 +416,11 @@ export default function AboutPage() {
       {/* Team Section */}
       <section className="py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Tim Kepemimpinan
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className={darkMode ? 'text-gray-400 text-lg' : 'text-gray-600 text-lg'}>
               Dipimpin oleh profesional berpengalaman di industri IT
             </p>
           </div>
@@ -374,17 +429,20 @@ export default function AboutPage() {
             {team.map((member, index) => (
               <div
                 key={index}
-                className="text-center p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30 hover:bg-gradient-to-br hover:from-[#0cc0df]/5 hover:to-transparent transition-all duration-300"
+                className={`text-center p-6 rounded-xl border transition-all duration-500 animate-fade-in-up ${
+                  darkMode 
+                    ? 'border-[#00D9FF]/20 bg-[#142B47]/30 hover:border-[#00D9FF]/40 hover:shadow-xl hover:shadow-[#00D9FF]/10'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#0cc0df] to-[#ffde59] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#0cc0df]/20">
-                  <span className="text-white text-2xl font-bold">
-                    {member.name.charAt(0)}
-                  </span>
+                <div className="w-20 h-20 rounded-full bg-linear-to-r from-[#0cc0df] to-[#ffde59] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#0cc0df]/30 font-black text-2xl text-[#0A1628]">
+                  {member.name.charAt(0)}
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-1">
+                <h3 className="text-lg font-bold text-white mb-1">
                   {member.name}
                 </h3>
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-sm font-medium mb-3">
+                <p className="text-[#0cc0df] text-sm font-bold mb-3">
                   {member.position}
                 </p>
                 <p className="text-gray-400 text-sm">
@@ -397,13 +455,15 @@ export default function AboutPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 sm:py-28 bg-[#000F1F] border-y border-white/5">
+      <section className={`py-20 sm:py-28 border-y ${
+        darkMode ? 'bg-[#142B47]/30 border-[#00D9FF]/10' : 'bg-gray-50 border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
               Mengapa Memilih NTI?
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className={`text-lg max-w-2xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Keunggulan yang membuat kami menjadi partner IT pilihan utama
             </p>
           </div>
@@ -412,15 +472,24 @@ export default function AboutPage() {
             {whyChooseUs.map((item, index) => (
               <div
                 key={index}
-                className="p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30 hover:bg-gradient-to-br hover:from-[#0cc0df]/5 hover:to-transparent transition-all duration-300"
+                className={`p-6 rounded-xl border backdrop-blur-sm transition-all duration-500 animate-fade-in-up ${
+                  darkMode 
+                    ? 'border-[#00D9FF]/20 bg-[#0A1628]/50 hover:border-[#00D9FF]/40 hover:shadow-xl hover:shadow-[#00D9FF]/10'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-xl hover:shadow-gray-200'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center mb-4">
-                  <item.icon className="w-6 h-6 text-[#0cc0df]" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                  darkMode
+                    ? 'bg-[#0cc0df]/10 shadow-lg shadow-[#0cc0df]/20'
+                    : 'bg-[#0cc0df]/5 shadow-lg shadow-[#0cc0df]/5'
+                }`}>
+                  <item.icon className="w-7 h-7 text-[#0cc0df]" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">
+                <h3 className={`text-lg font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                   {item.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {item.description}
                 </p>
               </div>
@@ -430,31 +499,49 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 sm:py-24 bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+      <section className="relative py-20 sm:py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-r from-[#0cc0df] to-[#ffde59]" />
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 space-y-6 relative z-10 animate-fade-in-up">
+          <h2 className="text-3xl sm:text-4xl font-black text-[#0A1628]">
             Mari Bergabung dengan 500+ Klien Kami
           </h2>
-          <p className="text-white/90 text-lg max-w-2xl mx-auto">
+          <p className="text-[#0A1628]/80 text-lg max-w-2xl mx-auto font-medium">
             Wujudkan transformasi digital bisnis Anda bersama partner IT yang terpercaya dan berpengalaman.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href="/services"
-              className="inline-flex items-center bg-white text-gray-900 font-semibold py-3 px-8 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center bg-[#0A1628] text-white font-bold py-3 px-8 rounded-full hover:bg-[#142B47] hover:scale-105 transition-all duration-300"
             >
               Lihat Layanan Kami
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center border-2 border-white text-white font-semibold py-3 px-8 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300"
+              className="inline-flex items-center border-2 border-[#0A1628] text-[#0A1628] font-bold py-3 px-8 rounded-full hover:bg-[#0A1628] hover:text-white transition-all duration-300"
             >
               Hubungi Kami
             </Link>
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+      `}</style>
     </main>
   );
 }

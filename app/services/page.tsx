@@ -1,27 +1,45 @@
 "use client";
 
 import {
-    ArrowRight,
-    Check,
-    ChevronDown,
-    Cloud,
-    HardDrive,
-    Lock,
-    Monitor,
-    Package,
-    Radio,
-    Server,
-    Settings,
-    Shield,
-    Smartphone,
-    Wifi,
-    Zap
+  ArrowRight,
+  Check,
+  ChevronDown,
+  Cloud,
+  HardDrive,
+  Lock,
+  Monitor,
+  Moon,
+  Package,
+  Radio,
+  Server,
+  Settings,
+  Shield,
+  Smartphone,
+  Sun,
+  Wifi,
+  Zap
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ServicesPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    setIsVisible(true);
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
+  };
 
   const services = [
     {
@@ -59,48 +77,6 @@ export default function ServicesPage() {
         "After-sales support dan maintenance",
         "Instalasi dan konfigurasi sistem",
         "Trade-in program untuk upgrade perangkat"
-      ],
-      packages: [
-        {
-          name: "Basic Package",
-          price: "Mulai dari 8 Juta",
-          description: "Cocok untuk startup dan UMKM",
-          features: [
-            "PC/Laptop Entry Level",
-            "Windows 11 Pro",
-            "Office 365 Basic",
-            "Antivirus 1 tahun",
-            "Garansi 1 tahun"
-          ]
-        },
-        {
-          name: "Professional Package",
-          price: "Mulai dari 15 Juta",
-          description: "Untuk bisnis menengah",
-          features: [
-            "Workstation/Laptop High-End",
-            "Windows 11 Pro",
-            "Office 365 Business",
-            "Antivirus Enterprise",
-            "Garansi 2 tahun",
-            "On-site support"
-          ],
-          featured: true
-        },
-        {
-          name: "Enterprise Package",
-          price: "Custom Quote",
-          description: "Solusi lengkap untuk perusahaan besar",
-          features: [
-            "Server & Workstation",
-            "Windows Server + CAL",
-            "Office 365 Enterprise",
-            "Security Suite Enterprise",
-            "Garansi 3 tahun",
-            "Dedicated support",
-            "Maintenance contract"
-          ]
-        }
       ]
     },
     {
@@ -139,51 +115,6 @@ export default function ServicesPage() {
         "24/7 monitoring & support",
         "Control panel yang user-friendly",
         "Migration service gratis"
-      ],
-      packages: [
-        {
-          name: "Starter Cloud",
-          price: "500K/bulan",
-          description: "Untuk aplikasi dan website kecil",
-          features: [
-            "2 vCPU Cores",
-            "4 GB RAM",
-            "80 GB SSD Storage",
-            "2 TB Bandwidth",
-            "1 IPv4 Address",
-            "Daily Backup"
-          ]
-        },
-        {
-          name: "Business Cloud",
-          price: "1.5 Juta/bulan",
-          description: "Untuk aplikasi bisnis menengah",
-          features: [
-            "4 vCPU Cores",
-            "8 GB RAM",
-            "160 GB SSD Storage",
-            "4 TB Bandwidth",
-            "2 IPv4 Address",
-            "Daily Backup",
-            "Priority Support"
-          ],
-          featured: true
-        },
-        {
-          name: "Enterprise Cloud",
-          price: "Custom",
-          description: "Solusi cloud untuk skala besar",
-          features: [
-            "Custom vCPU Cores",
-            "Custom RAM",
-            "Custom SSD Storage",
-            "Unlimited Bandwidth",
-            "Multiple IPv4",
-            "Hourly Backup",
-            "Dedicated Support",
-            "Custom Configuration"
-          ]
-        }
       ]
     },
     {
@@ -222,51 +153,6 @@ export default function ServicesPage() {
         "SLA guarantee dengan kompensasi",
         "Free installation & router",
         "Teknisi standby untuk troubleshooting"
-      ],
-      packages: [
-        {
-          name: "SME Internet",
-          price: "2 Juta/bulan",
-          description: "Untuk usaha kecil menengah",
-          features: [
-            "Up to 20 Mbps",
-            "Dedicated Connection",
-            "1 Static IP",
-            "Free Router",
-            "Free Installation",
-            "8x5 Support"
-          ]
-        },
-        {
-          name: "Corporate Internet",
-          price: "5 Juta/bulan",
-          description: "Untuk kantor dan perusahaan",
-          features: [
-            "Up to 50 Mbps",
-            "Dedicated Connection",
-            "2 Static IP",
-            "Enterprise Router",
-            "Free Installation",
-            "24/7 Support",
-            "SLA 99.5%"
-          ],
-          featured: true
-        },
-        {
-          name: "Enterprise Internet",
-          price: "Custom",
-          description: "Untuk kebutuhan bandwidth besar",
-          features: [
-            "Up to 1 Gbps",
-            "Dedicated Connection",
-            "Multiple Static IP",
-            "Managed Router",
-            "Free Installation",
-            "24/7 Priority Support",
-            "SLA 99.9%",
-            "Redundant Connection"
-          ]
-        }
       ]
     }
   ];
@@ -295,28 +181,54 @@ export default function ServicesPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#001B33] text-gray-100">
+    <main className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? 'bg-[#0A1628] text-gray-100' : 'bg-white text-gray-900'
+    }`}>
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className={`fixed top-20 right-4 z-50 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+          darkMode
+            ? 'bg-linear-to-r from-[#0cc0df]/10 to-[#ffde59]/10 border border-[#0cc0df]/30 text-[#0cc0df] hover:from-[#0cc0df]/20 hover:to-[#ffde59]/20'
+            : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 shadow-lg'
+        }`}
+        aria-label="Toggle theme"
+      >
+        {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+
       {/* Hero Section */}
-      <section className="relative py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#002244] to-[#001B33] border-b border-white/5 overflow-hidden">
-        {/* Gradient Accent */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 blur-3xl rounded-full" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#ffde59]/10 to-[#0cc0df]/10 blur-3xl rounded-full" />
+      <section className={`relative py-20 sm:py-28 px-4 sm:px-6 border-b overflow-hidden ${
+        darkMode ? 'border-[#0cc0df]/10' : 'border-gray-200'
+      }`}>
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl animate-pulse ${
+            darkMode 
+              ? 'bg-linear-to-br from-[#0cc0df]/10 to-[#ffde59]/5'
+              : 'bg-linear-to-br from-[#0cc0df]/15 to-[#ffde59]/10'
+          }`} />
+          <div className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl ${
+            darkMode
+              ? 'bg-linear-to-tr from-[#0cc0df]/5 to-[#ffde59]/5'
+              : 'bg-linear-to-tr from-[#0cc0df]/10 to-[#ffde59]/10'
+          }`} />
+        </div>
         
-        <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#0cc0df]/20 to-[#ffde59]/20 border border-[#0cc0df]/30 rounded-full">
-            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-sm font-medium">
-              Layanan Profesional
-            </p>
+        <div className={`max-w-4xl mx-auto text-center space-y-6 relative z-10 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
+          <div className="inline-block px-4 py-2 bg-linear-to-r from-[#0cc0df]/10 to-[#ffde59]/10 border border-[#0cc0df]/30 rounded-full backdrop-blur-sm">
+            <p className="text-[#0cc0df] text-sm font-bold">Layanan Profesional</p>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-            Solusi IT Komprehensif untuk{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">
-              Bisnis Anda
-            </span>
+          <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-black ${
+            darkMode ? 'text-white' : 'text-gray-900'
+          }`}>
+            Solusi IT Komprehensif untuk <span className="bg-linear-to-r from-[#0cc0df] to-[#ffde59] bg-clip-text text-transparent">Bisnis Anda</span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className={`text-lg sm:text-xl max-w-3xl mx-auto ${
+            darkMode ? 'text-gray-300' : 'text-gray-600'
+          }`}>
             Dari infrastruktur hardware hingga cloud dan konektivitas, kami menyediakan semua yang Anda butuhkan untuk transformasi digital.
           </p>
         </div>
@@ -328,22 +240,26 @@ export default function ServicesPage() {
           key={service.id}
           id={service.id}
           className={`py-20 sm:py-28 relative ${
-            index % 2 === 0 ? "bg-[#001B33]" : "bg-[#000F1F]"
+            index % 2 === 0 
+              ? darkMode ? 'bg-[#0A1628]' : 'bg-white'
+              : darkMode ? 'bg-[#142B47]/30' : 'bg-gray-50'
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             {/* Service Header */}
-            <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center mx-auto border border-[#0cc0df]/30">
+            <div className="text-center max-w-3xl mx-auto mb-16 space-y-4 animate-fade-in-up">
+              <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-[#0cc0df]/10 to-[#ffde59]/10 border border-[#0cc0df]/30 flex items-center justify-center mx-auto shadow-lg shadow-[#0cc0df]/20">
                 <service.icon className="w-8 h-8 text-[#0cc0df]" />
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              <h2 className={`text-3xl sm:text-4xl font-black ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>
                 {service.title}
               </h2>
-              <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-lg font-medium">
+              <p className="text-[#0cc0df] text-lg font-bold">
                 {service.subtitle}
               </p>
-              <p className="text-gray-400 leading-relaxed">
+              <p className={`leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 {service.description}
               </p>
             </div>
@@ -353,15 +269,22 @@ export default function ServicesPage() {
               {service.features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="p-6 rounded-xl border border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30 hover:bg-white/[0.04] transition-all duration-300 group"
+                  className={`p-6 rounded-xl border transition-all duration-500 group animate-fade-in-up ${
+                    darkMode
+                      ? 'border-[#0cc0df]/20 bg-[#142B47]/30 hover:border-[#0cc0df]/40 hover:bg-[#142B47]/50'
+                      : 'border-gray-200 bg-white hover:border-[#0cc0df]/40 hover:shadow-lg'
+                  }`}
+                  style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#0cc0df]/20 to-[#ffde59]/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-linear-to-br from-[#0cc0df]/10 to-[#ffde59]/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#0cc0df]/20 transition-all duration-500">
                     <feature.icon className="w-6 h-6 text-[#0cc0df]" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className={`text-lg font-bold mb-2 ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     {feature.desc}
                   </p>
                 </div>
@@ -369,90 +292,58 @@ export default function ServicesPage() {
             </div>
 
             {/* Benefits */}
-            <div className="mb-16 p-8 rounded-2xl border border-[#0cc0df]/20 bg-gradient-to-br from-[#0cc0df]/5 to-transparent">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">
+            <div className={`mb-16 p-8 rounded-2xl border animate-fade-in-up ${
+              darkMode
+                ? 'border-[#0cc0df]/20 bg-[#142B47]/30'
+                : 'border-gray-200 bg-gray-50'
+            }`}>
+              <h3 className={`text-2xl font-black mb-6 text-center ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>
                 Keuntungan Layanan
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {service.benefits.map((benefit, idx) => (
-                  <div key={idx} className="flex items-start space-x-3">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#0cc0df]/30 to-[#ffde59]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div key={idx} className="flex items-start space-x-3 group">
+                    <div className="w-6 h-6 rounded-full bg-[#0cc0df]/20 flex items-center justify-center shrink-0 mt-0.5 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-[#0cc0df]/30 transition-all duration-300">
                       <Check className="w-4 h-4 text-[#0cc0df]" />
                     </div>
-                    <span className="text-gray-300">{benefit}</span>
+                    <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{benefit}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Pricing Packages */}
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-8 text-center">
-                Paket Layanan
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {service.packages.map((pkg, idx) => (
-                  <div
-                    key={idx}
-                    className={`relative p-8 rounded-2xl border transition-all duration-300 ${
-                      pkg.featured
-                        ? "border-[#0cc0df]/50 bg-gradient-to-b from-[#0cc0df]/10 to-transparent scale-105"
-                        : "border-white/10 bg-white/[0.02] hover:border-[#0cc0df]/30"
-                    }`}
-                  >
-                    {pkg.featured && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-white text-sm font-semibold px-4 py-1 rounded-full">
-                        Populer
-                      </div>
-                    )}
-                    
-                    <div className="text-center mb-6">
-                      <h4 className="text-xl font-bold text-white mb-2">
-                        {pkg.name}
-                      </h4>
-                      <p className="text-gray-400 text-sm mb-4">
-                        {pkg.description}
-                      </p>
-                      <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0cc0df] to-[#ffde59]">
-                        {pkg.price}
-                      </div>
-                    </div>
-
-                    <ul className="space-y-3 mb-8">
-                      {pkg.features.map((feature, fidx) => (
-                        <li key={fidx} className="flex items-start space-x-3">
-                          <Check className="w-5 h-5 text-[#0cc0df] flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-300 text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Link
-                      href="/contact"
-                      className={`block w-full text-center py-3 rounded-lg font-semibold transition-all duration-300 ${
-                        pkg.featured
-                          ? "bg-gradient-to-r from-[#0cc0df] to-[#ffde59] text-white hover:shadow-lg hover:shadow-[#0cc0df]/30"
-                          : "border border-[#0cc0df]/50 text-[#0cc0df] hover:bg-[#0cc0df]/10"
-                      }`}
-                    >
-                      Pilih Paket
-                    </Link>
-                  </div>
-                ))}
-              </div>
+            {/* Contact CTA */}
+            <div className="text-center animate-fade-in-up">
+              <Link
+                href="/contact"
+                    className={`inline-flex items-center px-8 py-4 text-lg font-bold rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                  darkMode
+                    ? 'bg-linear-to-r from-[#0cc0df] to-[#ffde59] text-gray-900 hover:shadow-lg hover:shadow-[#0cc0df]/50'
+                    : 'bg-linear-to-r from-[#0cc0df] to-[#ffde59] text-gray-900 hover:shadow-lg'
+                }`}
+              >
+                Diskusikan Kebutuhan Anda
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
             </div>
           </div>
         </section>
       ))}
 
       {/* FAQ Section */}
-      <section className="py-20 sm:py-28 bg-gradient-to-b from-[#001B33] to-[#002244] border-t border-white/5">
+      <section className={`py-20 sm:py-28 border-t ${
+        darkMode ? 'bg-[#142B47]/30 border-[#0cc0df]/10' : 'bg-gray-50 border-gray-200'
+      }`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h2 className={`text-3xl sm:text-4xl font-black mb-4 ${
+              darkMode ? 'text-white' : 'text-gray-900'
+            }`}>
               Pertanyaan Umum
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Jawaban untuk pertanyaan yang sering diajukan
             </p>
           </div>
@@ -461,24 +352,37 @@ export default function ServicesPage() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="border border-white/10 rounded-xl bg-white/[0.02] overflow-hidden hover:border-[#0cc0df]/30 transition-colors"
+                className={`border rounded-xl overflow-hidden transition-all duration-300 animate-fade-in-up ${
+                  darkMode
+                    ? 'border-[#0cc0df]/20 bg-[#0A1628]/50 hover:border-[#0cc0df]/40'
+                    : 'border-gray-200 bg-white hover:border-[#0cc0df]/40 hover:shadow-lg'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-white/[0.02] transition-colors"
+                  className={`w-full flex items-center justify-between p-6 text-left transition-colors ${
+                    darkMode ? 'hover:bg-[#142B47]/30' : 'hover:bg-gray-50'
+                  }`}
                 >
-                  <span className="text-white font-semibold pr-4">
+                  <span className={`font-bold pr-4 ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
                     {faq.question}
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-[#0cc0df] flex-shrink-0 transition-transform duration-300 ${
+                    className={`w-5 h-5 text-[#0cc0df] shrink-0 transition-transform duration-300 ${
                       openFaq === index ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {openFaq === index && (
-                  <div className="px-6 pb-6 border-t border-[#0cc0df]/20">
-                    <p className="text-gray-400 leading-relaxed pt-4">
+                  <div className={`px-6 pb-6 border-t animate-fade-in-up ${
+                    darkMode ? 'border-[#0cc0df]/20' : 'border-gray-200'
+                  }`}>
+                    <p className={`leading-relaxed pt-4 ${
+                      darkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>
                       {faq.answer}
                     </p>
                   </div>
@@ -490,31 +394,61 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 sm:py-24 bg-gradient-to-r from-[#0cc0df] to-[#ffde59] border-t border-white/5">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+      <section className="relative py-20 sm:py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-r from-[#0cc0df] to-[#ffde59]" />
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 space-y-6 relative z-10 animate-fade-in-up">
+          <h2 className={`text-3xl sm:text-4xl font-black ${
+            darkMode ? 'text-[#0A1628]' : 'text-white'
+          }`}>
             Butuh Konsultasi Lebih Lanjut?
           </h2>
-          <p className="text-white/90 text-lg max-w-2xl mx-auto">
+          <p className={`text-lg max-w-2xl mx-auto font-medium ${
+            darkMode ? 'text-[#0A1628]/80' : 'text-white/90'
+          }`}>
             Tim ahli kami siap membantu Anda memilih solusi IT yang tepat sesuai kebutuhan dan budget bisnis Anda.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href="/contact"
-              className="inline-flex items-center bg-white text-gray-900 font-semibold py-3 px-8 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-300"
+              className={`inline-flex items-center font-bold py-3 px-8 rounded-full hover:scale-105 transition-all duration-300 ${
+                darkMode
+                  ? 'bg-[#0A1628] text-white hover:bg-[#142B47]'
+                  : 'bg-white text-gray-900 hover:bg-gray-100'
+              }`}
             >
               Hubungi Kami
               <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <a
               href="tel:+628195016666"
-              className="inline-flex items-center border-2 border-white text-white font-semibold py-3 px-8 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300"
+              className={`inline-flex items-center border-2 font-bold py-3 px-8 rounded-full transition-all duration-300 ${
+                darkMode
+                  ? 'border-[#0A1628] text-[#0A1628] hover:bg-[#0A1628] hover:text-white'
+                  : 'border-white text-white hover:bg-white hover:text-gray-900'
+              }`}
             >
               atau Telepon Langsung
             </a>
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+      `}</style>
     </main>
   );
 }
